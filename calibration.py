@@ -922,14 +922,14 @@ def sky_substraction():
     
     cont = False
     while cont is False:
-        file_index = input(f'Chose file (select index from 0 to {len(summary_science)-1}) or "all": ')
+        file_index = input(f'Choose file (select index from 0 to {len(summary_science)-1}) or "all": ')
         if file_index == 'all':
             indexes = list(range(0, len(summary_science)))
             cont = True
         else:
             indexes = [int(file_index)]
             if indexes[0] > (len(summary_science)-1):
-                print(f'Incorrect index. Chose an index between 0 and {len(summary_science)-1}.')
+                print(f'Incorrect index. Choose an index between 0 and {len(summary_science)-1}.')
             else:
                 cont = True
     
@@ -1100,14 +1100,14 @@ def spec_align():
     
     cont = False
     while cont is False:
-        file_index = input(f'Chose file (select index from 0 to {len(summary_science)-1}) or "all": ')
+        file_index = input(f'Choose file (select index from 0 to {len(summary_science)-1}) or "all": ')
         if file_index == 'all':
             indexes = list(range(0, len(summary_science)))
             cont = True
         else:
             indexes = [int(file_index)]
             if indexes[0] > (len(summary_science)-1):
-                print(f'Incorrect index. Chose an index between 0 and {len(summary_science)-1}.')
+                print(f'Incorrect index. Choose an index between 0 and {len(summary_science)-1}.')
             else:
                 cont = True
     
@@ -1151,7 +1151,7 @@ def spec_align():
         fig.canvas.flush_events()
         plt.pause(0.1)
         
-        print('Chose the x and the y ranges with the spectral trace IN the window, to align the spectum. INTEGERS ONLY')
+        print('Choose the x and the y ranges with the spectral trace IN the window, to align the spectum. INTEGERS ONLY')
             
         cont = False
         while cont is False:
@@ -1221,14 +1221,14 @@ def spec_extract(initial_xmin, initial_xmax, initial_ymin, initial_ymax):
     
     cont = False
     while cont is False:
-        file_index = input(f'Chose file (select index from 0 to {len(summary_science)-1}) or "all": ')
+        file_index = input(f'Choose file (select index from 0 to {len(summary_science)-1}) or "all": ')
         if file_index == 'all':
             indexes = list(range(0, len(summary_science)))
             cont = True
         else:
             indexes = [int(file_index)]
             if indexes[0] > (len(summary_science)-1):
-                print(f'Incorrect index. Chose an index between 0 and {len(summary_science)-1}.')
+                print(f'Incorrect index. Choose an index between 0 and {len(summary_science)-1}.')
             else:
                 cont = True
                 
@@ -1272,7 +1272,7 @@ def spec_extract(initial_xmin, initial_xmax, initial_ymin, initial_ymax):
             # plt.tight_layout()
             # plt.show()
     
-        print('Chose the y range to extract the spectum. INTEGERS ONLY')
+        print('Choose the y range to extract the spectum. INTEGERS ONLY')
             
         cont = False
         first = True
@@ -1604,7 +1604,7 @@ def flux_calib(std_flux_mags=False):
     # The raw_std to the reduced file containing the standard star (same grism and slit as the target).
     # The abs_flux_std to the path to the file wite the absolute flux calibration.
     
-    ifc_all, summary_all, _ = read_images(img_code='dswfz*', plot=False)
+    ifc_all, summary_all, _ = read_images(img_code='spectra1D*', plot=False)
     
     matches_run = (summary_all['IMAGETYP'] == 'science')
     summary_science = summary_all[matches_run]
@@ -1618,18 +1618,18 @@ def flux_calib(std_flux_mags=False):
     
     cont = False
     while cont is False:
-        file_index = int(input(f'Chose a file to flux calibrate (select index from 0 to {len(summary_science)-1}): '))
+        file_index = int(input(f'Choose a file to flux calibrate (select index from 0 to {len(summary_science)-1}): '))
         if file_index > (len(summary_science)-1):
-            print(f'Incorrect index. Chose an index between 0 and {len(summary_science)-1}.')
+            print(f'Incorrect index. Choose an index between 0 and {len(summary_science)-1}.')
         else:
             cont = True       
     science_file = summary_science['file'][file_index]
     
     cont = False
     while cont is False:
-        file_index = int(input(f'Chose a file with the observed standard star data (select index from 0 to {len(summary_science)-1}): '))
+        file_index = int(input(f'Choose a file with the observed standard star data (select index from 0 to {len(summary_science)-1}): '))
         if file_index > (len(summary_science)-1):
-            print(f'Incorrect index. Chose an index between 0 and {len(summary_science)-1}.')
+            print(f'Incorrect index. Choose an index between 0 and {len(summary_science)-1}.')
         else:
             cont = True       
     standard_file = summary_science['file'][file_index]
@@ -1646,9 +1646,9 @@ def flux_calib(std_flux_mags=False):
     
     cont = False
     while cont is False:
-        file_index = int(input(f'Chose a file with the absolute flux calibration (select index from 0 to {len(absolute_standards)-1}): '))
+        file_index = int(input(f'Choose a file with the absolute flux calibration (select index from 0 to {len(absolute_standards)-1}): '))
         if file_index > (len(absolute_standards)-1):
-            print(f'Incorrect index. Chose an index between 0 and {len(absolute_standards)-1}.')
+            print(f'Incorrect index. Choose an index between 0 and {len(absolute_standards)-1}.')
         else:
             cont = True
     abs_standard_file = absolute_standards[file_index]
