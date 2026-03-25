@@ -9,12 +9,51 @@ import os
 from pathlib import Path
 import calibration as calib
 
-# Set directories as a global variable
-# DATADIR = input('Input directory where your data are: ')
-# directory = Path(DATADIR)
-# PLOTDIR = os.path.join(DATADIR, "plots")
+import warnings
+warnings.filterwarnings("ignore")
 
 calib.init()
+                   
+def change_keyword(path, keyword, change_from, change_to):
+    from astropy.io import fits
+    
+    if os.path.isdir(path):
+        list_of_files = os.listdir(path)
+    else:
+        list_of_files = [path]
+    
+    for fname in list_of_files:
+        if fname.endswith(".fits"):
+            if len(list_of_files)>1:
+                fullpath = os.path.join(path, fname)
+            else:
+                fullpath = fname
+
+            with fits.open(fullpath, mode="update") as hdul:
+                hdr = hdul[0].header
+
+                if hdr.get(keyword) == change_from:
+                    hdr[keyword] = change_to
+                    hdul.flush()
+                    
+def check_images(dir):
+    
+    from ccdproc import ImageFileCollection
+    
+    #CHECK IMAGES AVAILABLE
+    selected_keywords = [ #fits header parameters to check
+        'IMAGETYP', 'NAXIS1', 'NAXIS2', 'OBJECT' , 
+            'INSAPDY', 'INSGRID', 'INSGRNAM', 'INSGRROT', 'EXPTIME' , 'INSFLID', 'DATE-OBS'
+    ]
+    
+    directory=Path(dir)
+    ifc_all = ImageFileCollection(
+        location=directory,
+        glob_include='caf*.fits',
+        keywords=selected_keywords
+    )
+    
+    ifc_all.summary.pprint(max_width=-1, max_lines=-1)
 
 def general_calibrations():
     print('*************************')

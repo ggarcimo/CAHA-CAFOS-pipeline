@@ -70,6 +70,10 @@ def init():
     print('   - general_calibrations(): bias, flats, and wave calibrations')
     print('   - science(): sky substraction, alignment, and spectrum extraction')
     print('   - flux_calibration(): flux calibration of reduced images')
+    print(' --- ')
+    print(' * Other functions')
+    print('   - change_keyword(path, keyword, change_from, change_to): changes the value of a given keyword')
+    print('   - check_images(dir): prints a table with some useful info on the files in a given directory')
 
 def read_images(img_code='*', plot=False):
     ##DATADIR='test'
@@ -502,6 +506,7 @@ def wavelength_calibration(plot=False):
                 continue
             print(f'Grism/Slit combination: {grism}, {slit} micron')
             arc_file=summary_arc['file'][mask][0]
+            print(f'Using arc file {arc_file}')
             input_filename = directory / arc_file
             data = fits.getdata(input_filename)
             
@@ -519,12 +524,28 @@ def wavelength_calibration(plot=False):
                 pdf_output=os.path.join(PLOTDIR, f"xpeaks_reference_{grism}_{slit}.pdf"),
                 pdf_only=True
             )
-            
-            # reference lines and pixels for Hg+He+Rb lamps, grism g-200
-            comparison_reference_wav = np.array([4046.56, 4358.33, 4678.15, 4799.91, 5085.82, 5460.74,
-                                                 6438.47, 7800.268, 7947.603, 8521.162, 10139.8])
-            comparison_reference_pix = np.array([1475,1400,1320,1295,1225,1140,925,635,605,485,125])
-            
+
+            if str(grism)=='green-200':
+                # reference lines and pixels for Hg+He+Rb lamps, grism g-200
+                comparison_reference_wav = np.array([4046.56, 4358.33, 4678.15, 4799.91, 5085.82, 5460.74,
+                                                     6438.47, 7800.268, 7947.603, 8521.162, 10139.8])
+                comparison_reference_pix = np.array([1475,1400,1320,1295,1225,1140,925,635,605,485,125])
+            elif str(grism)=='red-100':
+                # reference lines and pixels for all lamps, grism r-100
+                comparison_reference_wav = np.array([
+                    6678.2, 6965.43, 7107.5, 7383.98, 7503.9,
+                    7635.1, 7800.3, 7948.2, 8014.78, 8264.5,
+                    8408.2, 8521.4, 8667.9, 9123.0, 9224.5
+                ])
+    
+                comparison_reference_pix = np.array([
+                    1410, 1275, 1110, 1060, 1000,
+                    935,  865,  795,  765, 640,
+                    575,  505,  450,  220,  195
+                ])
+            else:
+                raise Exception(f'Sorry, the grism {grism} is not supported yet.')
+                
             # revert x-axis
             comparison_reference_pix = 2000-comparison_reference_pix
             
@@ -666,7 +687,7 @@ def wavelength_calibration(plot=False):
             
             matches_run = (summary_all['IMAGETYP'] == 'science')
             summary_science = summary_all[matches_run]
-            matches_run = (summary_science['EXPTIME']>20)
+            matches_run = (summary_science['EXPTIME']>5)
             summary_science = summary_science[matches_run]
             matches_run = (summary_science['INSGRNAM'] == grism) & (summary_science['INSAPDY'] == slit)
             
@@ -1659,7 +1680,7 @@ def flux_calib(std_flux_mags=False):
     
     abs_flux_std = os.path.join('Standard stars', abs_standard_file)
     
-    apply_flux_calibration(raw_science, raw_std, abs_flux_std, std_flux_mags=False, wmin=3800, wmax=10000)
+    apply_flux_calibration(raw_science, raw_std, abs_flux_std, std_flux_mags=std_flux_mags, wmin=3800, wmax=10000)
     
     name = os.path.join(os.path.dirname(raw_science), \
                          os.path.basename(raw_science).replace(".fits", ".txt"))
