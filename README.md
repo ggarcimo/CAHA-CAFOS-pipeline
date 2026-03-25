@@ -40,7 +40,7 @@ To set up the pipeline, follow these steps:
    Install the necessary Python packages using `pip`:
 
    ```bash
-   pip install -r requirements.txt
+   pip install -r pip-requirements.txt
    ```
 
    Alternatively, if you prefer using Conda, you can create the environment using the provided `environment.yml` file:

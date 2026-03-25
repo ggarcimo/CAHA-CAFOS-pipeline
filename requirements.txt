@@ -1,4 +1,0 @@
-ccdproc
-matplotlib
-tqdm
-scipy
